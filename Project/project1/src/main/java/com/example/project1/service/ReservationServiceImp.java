@@ -15,7 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class ReservationServiceImp implements ReservationService{
     private final SubjectRepo subjectRepo;
 
     @Override
-    public void reservate(String email, String pointName, String subjectName, int number) {
+    public void reservate(String email, String pointName, String subjectName, int number, LocalDateTime date) {
         Parent parent = parentRepo.findByEmail(email);
         Point point = pointRepo.findByName(pointName);
         List<Subject> subjects = subjectRepo.findAllByName(subjectName);
@@ -42,8 +44,16 @@ public class ReservationServiceImp implements ReservationService{
             }
         }
         if(subject != null) {
-            Reservation r = Reservation.ReservationBuilder().reserved(new Date()).parent(parent).subject(subject).build();
-            reservationRepo.save(r);
+            Date rDate = java.sql.Timestamp.valueOf(date);
+            Calendar c = Calendar.getInstance();
+            c.setTime(rDate);
+            c.add(Calendar.DATE, 14);
+            rDate = c.getTime();
+            Date now = new Date();
+            if(rDate.before(now)) {
+                Reservation r = Reservation.ReservationBuilder().reserved(new Date()).parent(parent).subject(subject).build();
+                reservationRepo.save(r);
+            }
         }
     }
 

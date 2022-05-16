@@ -1,11 +1,13 @@
 package com.example.project1.controller;
 
-import com.example.project1.domain.repo.ReservationRepo;
 import com.example.project1.service.ReservationServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api")
@@ -18,10 +20,11 @@ public class ReservationController {
             @RequestParam("email") String email,
             @RequestParam("pointName") String pointName,
             @RequestParam("subjectName") String subjectName,
-            @RequestParam("number") int number
+            @RequestParam("number") int number,
+            @RequestParam("date") @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime date
             ) throws IOException {
 
-        reservationServiceImp.reservate(email,pointName,subjectName,number);
+        reservationServiceImp.reservate(email,pointName,subjectName,number,date);
         return email+", "+pointName+", "+subjectName+", "+number;
     }
 
