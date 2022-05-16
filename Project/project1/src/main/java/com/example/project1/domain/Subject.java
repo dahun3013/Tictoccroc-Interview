@@ -1,9 +1,6 @@
 package com.example.project1.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,7 +9,7 @@ import javax.persistence.*;
 @Builder(builderMethodName = "SubjectBuilder")
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
+@Getter @Setter
 public class Subject {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

@@ -49,7 +49,6 @@ class Project1ApplicationTests {
 
         //Subject s = Subject.SubjectBuilder().name("드로잉").point(pointRepo.findByName("1번 지점")).currentNum(0).maxNum(20).build();
         //subjectRepo.save(s);
-        Parent p = parentRepo.findByName("이름 3");
         //Subject s = subjectRepo.findByName("드로잉");
         //System.out.println(p + ", "+s);
         //Reservation r = Reservation.ReservationBuilder().parent(p).subject(s).build();

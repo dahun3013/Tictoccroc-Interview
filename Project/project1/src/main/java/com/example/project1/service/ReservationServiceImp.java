@@ -43,7 +43,10 @@ public class ReservationServiceImp implements ReservationService{
                 break;
             }
         }
-        if(subject != null) {
+        if(reservationRepo.findByParentIdAndSubjectId(parent.getId(),subject.getId()) != null)
+            return;
+
+        if(subject != null && (subject.getCurrentNum()+number <= subject.getMaxNum())) {
             Date rDate = java.sql.Timestamp.valueOf(date);
             Calendar c = Calendar.getInstance();
             c.setTime(rDate);
@@ -51,6 +54,8 @@ public class ReservationServiceImp implements ReservationService{
             rDate = c.getTime();
             Date now = new Date();
             if(rDate.before(now)) {
+                subject.setCurrentNum(subject.getCurrentNum()+number);
+                subjectRepo.save(subject);
                 Reservation r = Reservation.ReservationBuilder().reserved(new Date()).parent(parent).subject(subject).build();
                 reservationRepo.save(r);
             }
@@ -70,15 +75,10 @@ public class ReservationServiceImp implements ReservationService{
             }
         }
         if(subjectId != 0L){
-            List<Reservation> reservation = reservationRepo.findAllByParentIdAndSubjectId(parent.getId(),subjectId);
+            Reservation reservation = reservationRepo.findByParentIdAndSubjectId(parent.getId(),subjectId);
 
-            if(reservation.size()>0){
-                for (Reservation r : reservation ){
-                    if(r.getSubject().getPoint().getId() == point.getId()) {
-                        reservationRepo.delete(r);
-                        break;
-                    }
-                }
+            if(reservation != null){
+                reservationRepo.delete(reservation);
             }
         }
     }
@@ -90,7 +90,7 @@ public class ReservationServiceImp implements ReservationService{
         Point point = pointRepo.findByName(name);
         List<Subject> subjects = subjectRepo.findAllByPointId(point.getId());
         for (Subject s : subjects) {
-            result.addAll(reservationRepo.findAllByParentIdAndSubjectId(point.getId(),s.getId()));
+            result.add(reservationRepo.findByParentIdAndSubjectId(point.getId(),s.getId()));
         }
         return result;
     }
