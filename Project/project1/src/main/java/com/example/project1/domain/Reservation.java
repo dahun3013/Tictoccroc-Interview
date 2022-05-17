@@ -9,7 +9,6 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "tbl_reservation")
 @Builder(builderMethodName = "ReservationBuilder")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,11 +16,11 @@ import java.util.Date;
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long reservationId;
     @Temporal(TemporalType.TIMESTAMP)
     private Date reserved;
     @ManyToOne
     private Parent parent;
     @ManyToOne
-    private Subject subject;
+    private Leasson leasson;
 }

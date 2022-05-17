@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tbl_parent")
 @Builder(builderMethodName = "ParentBuilder")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,7 +15,7 @@ import javax.persistence.*;
 public class Parent {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String name;
+    private Long parentId;
+    private String parentName;
     private String email;
 }

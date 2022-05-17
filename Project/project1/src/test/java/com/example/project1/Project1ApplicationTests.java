@@ -1,28 +1,21 @@
 package com.example.project1;
 
-import com.example.project1.domain.Parent;
-import com.example.project1.domain.Point;
-import com.example.project1.domain.Reservation;
-import com.example.project1.domain.Subject;
 import com.example.project1.domain.repo.ParentRepo;
-import com.example.project1.domain.repo.PointRepo;
+import com.example.project1.domain.repo.IslandRepo;
 import com.example.project1.domain.repo.ReservationRepo;
-import com.example.project1.domain.repo.SubjectRepo;
+import com.example.project1.domain.repo.LeassonRepo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.Date;
-import java.util.stream.IntStream;
 
 @SpringBootTest
 class Project1ApplicationTests {
     @Autowired
     ParentRepo parentRepo;
     @Autowired
-    PointRepo pointRepo;
+    IslandRepo islandRepo;
     @Autowired
-    SubjectRepo subjectRepo;
+    LeassonRepo leassonRepo;
     @Autowired
     ReservationRepo reservationRepo;
 

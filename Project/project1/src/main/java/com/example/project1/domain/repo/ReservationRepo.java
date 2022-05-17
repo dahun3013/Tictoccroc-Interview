@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface ReservationRepo extends JpaRepository<Reservation,Long>{
     List<Reservation> findAllByParentId(Long parentId);
-    List<Reservation> findAllBySubjectId(Long subjectId);
-
-    Reservation findByParentIdAndSubjectId(Long parentId, Long subjectId);
+    List<Reservation> findAllByLeassonId(Long LeassonId);
+    List<Reservation> findAllByIslandId(Long IslandId);
+    Reservation findByParentIdAndLeassonId(Long parentId, Long leassonId);
 
 }

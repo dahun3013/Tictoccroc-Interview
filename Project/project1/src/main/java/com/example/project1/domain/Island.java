@@ -8,14 +8,13 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tbl_point")
 @Builder(builderMethodName = "PointBuilder")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class Point {
+public class Island {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String name;
+    private Long islandId;
+    private String islandName;
     private String address;
 }

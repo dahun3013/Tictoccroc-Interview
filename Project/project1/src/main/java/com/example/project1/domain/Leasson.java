@@ -5,17 +5,16 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tbl_subject")
 @Builder(builderMethodName = "SubjectBuilder")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
-public class Subject {
+public class Leasson {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long leassonId;
     @ManyToOne
-    private Point point;
-    private String name;
+    private Island island;
+    private String leassonName;
     private int currentNum;
     private int maxNum;
 }
