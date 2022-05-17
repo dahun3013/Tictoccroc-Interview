@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Getter
 public class Island {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long islandId;
+    private Long id;
     private String islandName;
     private String address;
 }

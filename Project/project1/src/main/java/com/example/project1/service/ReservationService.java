@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface ReservationService {
     void makeReservation(ReservationDTO reservation);
-    void cancleReservation(ReservationDTO reservation);
+    void cancelReservation(ReservationDTO reservation);
     List<Reservation> getParentsSubscriber(Long parentId);
     List<Reservation> getIslandSubscriber(Long islandId);
-    List<Reservation> getLeassonSubscriber(Long leassonId);
+    List<Reservation> getLessonSubscriber(Long lessonId);
 }

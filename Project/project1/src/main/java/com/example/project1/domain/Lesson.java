@@ -9,12 +9,12 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
-public class Leasson {
+public class Lesson {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long leassonId;
+    private Long id;
     @ManyToOne
     private Island island;
-    private String leassonName;
+    private String lessonName;
     private int currentNum;
     private int maxNum;
 }

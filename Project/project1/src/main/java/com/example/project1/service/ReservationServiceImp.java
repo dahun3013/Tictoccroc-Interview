@@ -3,11 +3,11 @@ package com.example.project1.service;
 import com.example.project1.DTO.ReservationDTO;
 import com.example.project1.domain.Parent;
 import com.example.project1.domain.Reservation;
-import com.example.project1.domain.Leasson;
+import com.example.project1.domain.Lesson;
 import com.example.project1.domain.repo.ParentRepo;
 import com.example.project1.domain.repo.IslandRepo;
 import com.example.project1.domain.repo.ReservationRepo;
-import com.example.project1.domain.repo.LeassonRepo;
+import com.example.project1.domain.repo.LessonRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class ReservationServiceImp implements ReservationService{
     private final ParentRepo parentRepo;
     private final IslandRepo islandRepo;
     private final ReservationRepo reservationRepo;
-    private final LeassonRepo leassonRepo;
+    private final LessonRepo lessonRepo;
 
     @Override
     public void makeReservation(ReservationDTO reservation) {
@@ -40,19 +40,19 @@ public class ReservationServiceImp implements ReservationService{
         maxDay = c.getTime();
 
         if(nowDay.after(rDate) && maxDay.before(rDate)) {
-            Optional<Parent> p = parentRepo.findById(reservation.getParent().getParentId());
-            Optional<Leasson> l = leassonRepo.findById(reservation.getLeasson().getLeassonId());
+            Optional<Parent> p = parentRepo.findById(reservation.getParent().getId());
+            Optional<Lesson> l = lessonRepo.findById(reservation.getLesson().getId());
             int number = reservation.getNumber() + l.get().getCurrentNum();
 
             if(number<=l.get().getMaxNum()){
                 l.get().setCurrentNum(number);
-                leassonRepo.save(l.get());
+                lessonRepo.save(l.get());
 
                 reservationRepo.save(
                         Reservation.ReservationBuilder().
                                 reserved(rDate).
                                 parent(p.get()).
-                                leasson(l.get()).
+                                lesson(l.get()).
                                 build()
                 );
             }
@@ -60,26 +60,31 @@ public class ReservationServiceImp implements ReservationService{
     }
 
     @Override
-    public void cancleReservation(ReservationDTO reservation) {
+    public void cancelReservation(ReservationDTO reservation) {
         Parent p = reservation.getParent();
-        Leasson l = reservation.getLeasson();
+        Lesson l = reservation.getLesson();
         reservationRepo.delete(
-                reservationRepo.findByParentIdAndLeassonId(p.getParentId(),l.getLeassonId())
+                reservationRepo.findByParentIdAndLessonId(p.getId(),l.getId())
         );
     }
 
     @Override
     public List<Reservation> getParentsSubscriber(Long parentId){
-        return reservationRepo.findAllByParentId(parentId);
+        return reservationRepo.findAllByParentId(parentRepo.findById(parentId).get().getId());
     }
 
     @Override
     public List<Reservation> getIslandSubscriber(Long islandId) {
-        return reservationRepo.findAllByIslandId(islandId);
+        List<Reservation> result = new ArrayList<>();
+        lessonRepo.findAllByIslandId(
+                islandRepo.findById(islandId).get().getId()
+        ).forEach(l -> {result.addAll(reservationRepo.findAllByLessonId(l.getId()));});
+
+        return result;
     }
 
     @Override
-    public List<Reservation> getLeassonSubscriber(Long leassonId) {
-        return reservationRepo.findAllByLeassonId(leassonId);
+    public List<Reservation> getLessonSubscriber(Long lessonId) {
+        return reservationRepo.findAllByLessonId(lessonRepo.findById(lessonId).get().getId());
     }
 }

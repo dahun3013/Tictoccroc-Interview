@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class Parent {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long parentId;
+    private Long id;
     private String parentName;
     private String email;
 }

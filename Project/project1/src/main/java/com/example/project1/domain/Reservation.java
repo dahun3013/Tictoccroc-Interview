@@ -16,11 +16,11 @@ import java.util.Date;
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long reservationId;
+    private Long id;
     @Temporal(TemporalType.TIMESTAMP)
     private Date reserved;
     @ManyToOne
     private Parent parent;
     @ManyToOne
-    private Leasson leasson;
+    private Lesson lesson;
 }

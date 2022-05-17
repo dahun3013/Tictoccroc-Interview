@@ -4,10 +4,9 @@ import com.example.project1.domain.Island;
 import lombok.Data;
 
 @Data
-public class LeassonDTO {
-    private Long id;
+public class LessonDTO {
     private Island island;
-    private String name;
+    private String lessonName;
     private int currentNum;
     private int maxNum;
 }

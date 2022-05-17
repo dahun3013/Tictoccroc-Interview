@@ -21,22 +21,21 @@ public class ReservationController {
     //매장 의 예약내역 반환 {전체수업의 예약내역을 List로 담아서 줘야지}
     //매장 의 해당수업 예약내역 반환
 
-    @PostMapping("/parent/leassonReservation")
+    @PostMapping("/parent/lessonReservation")
     @Operation(summary = "예약", description = "째깍섬 예약 API")
-    public ResponseEntity leassonReservation(
+    public ResponseEntity lessonReservation(
             @RequestBody ReservationDTO reservation
     ){
-
         reservationServiceImp.makeReservation(reservation);
         return new ResponseEntity<>(reservation, HttpStatus.OK);
     }
 
-    @PostMapping("/parent/leassonCancel")
+    @PostMapping("/parent/lessonCancel")
     @Operation(summary = "예약취소", description = "째깍섬 예약취소 API")
-    public ResponseEntity leassonCancel(
+    public ResponseEntity lessonCancel(
             @RequestBody ReservationDTO reservation
     ){
-        reservationServiceImp.cancleReservation(reservation);
+        reservationServiceImp.cancelReservation(reservation);
         return new ResponseEntity<>(reservation, HttpStatus.OK);
     }
 
@@ -56,27 +55,27 @@ public class ReservationController {
         return new ResponseEntity<>(reservationServiceImp.getParentsSubscriber(islandId),HttpStatus.OK);
     }
 
-    @GetMapping("/leasson/subscriber/{leassonId}")
+    @GetMapping("/lesson/subscriber/{lessonId}")
     @Operation(summary = "예약조회[수업]", description = "째깍섬 수업별 예약조회 API")
     public ResponseEntity leassonSubsriber(
-            @PathVariable("leassonId") Long leassonId
+            @PathVariable("lessonId") Long lessonId
     ){
-        return new ResponseEntity<>(reservationServiceImp.getParentsSubscriber(leassonId),HttpStatus.OK);
+        return new ResponseEntity<>(reservationServiceImp.getParentsSubscriber(lessonId),HttpStatus.OK);
     }
 
     @GetMapping("/island/history/{islandId}")
     @Operation(summary = "예약이력조회[매장]", description = "째깍섬 매장별 예약이력조회 API")
     public String islandHistory(
-            @PathVariable("islandId") String email
+            @PathVariable("islandId") Long islandId
     ){
 
         return "";
     }
 
-    @GetMapping("/leasson/history/{leassonId}")
+    @GetMapping("/lesson/history/{lessonId}")
     @Operation(summary = "예약이력조회[수업]", description = "째깍섬 수업별 예약이력조회 API")
     public String leassonHistory(
-            @PathVariable("leassonId") String pointName
+            @PathVariable("lessonId") Long lessonId
     ){
 
         return "";
