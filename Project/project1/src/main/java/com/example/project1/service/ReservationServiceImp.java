@@ -1,13 +1,11 @@
 package com.example.project1.service;
 
 import com.example.project1.DTO.ReservationDTO;
+import com.example.project1.domain.History;
 import com.example.project1.domain.Parent;
 import com.example.project1.domain.Reservation;
 import com.example.project1.domain.Lesson;
-import com.example.project1.domain.repo.ParentRepo;
-import com.example.project1.domain.repo.IslandRepo;
-import com.example.project1.domain.repo.ReservationRepo;
-import com.example.project1.domain.repo.LessonRepo;
+import com.example.project1.domain.repo.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +22,7 @@ public class ReservationServiceImp implements ReservationService{
     private final IslandRepo islandRepo;
     private final ReservationRepo reservationRepo;
     private final LessonRepo lessonRepo;
+    private final HistoryRepo historyRepo;
 
     @Override
     public void makeReservation(ReservationDTO reservation) {
@@ -49,11 +48,19 @@ public class ReservationServiceImp implements ReservationService{
                 lessonRepo.save(l.get());
 
                 reservationRepo.save(
-                        Reservation.ReservationBuilder().
-                                reserved(rDate).
-                                parent(p.get()).
-                                lesson(l.get()).
-                                build()
+                        Reservation.ReservationBuilder()
+                                .date(rDate)
+                                .parent(p.get())
+                                .lesson(l.get())
+                                .build()
+                );
+                historyRepo.save(
+                        History.HistoryBuilder()
+                                .date(nowDay)
+                                .parent(p.get())
+                                .lesson(l.get())
+                                .activity("C")
+                                .build()
                 );
             }
         }
@@ -61,10 +68,19 @@ public class ReservationServiceImp implements ReservationService{
 
     @Override
     public void cancelReservation(ReservationDTO reservation) {
-        Parent p = reservation.getParent();
-        Lesson l = reservation.getLesson();
+        Date nowDay = new Date();
+        Optional<Parent> p = parentRepo.findById(reservation.getParent().getId());
+        Optional<Lesson> l = lessonRepo.findById(reservation.getLesson().getId());
         reservationRepo.delete(
-                reservationRepo.findByParentIdAndLessonId(p.getId(),l.getId())
+                reservationRepo.findByParentIdAndLessonId(p.get().getId(),l.get().getId())
+        );
+        historyRepo.save(
+                History.HistoryBuilder()
+                        .date(nowDay)
+                        .parent(p.get())
+                        .lesson(l.get())
+                        .activity("D")
+                        .build()
         );
     }
 

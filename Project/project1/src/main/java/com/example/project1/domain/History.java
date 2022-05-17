@@ -9,11 +9,11 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Builder(builderMethodName = "ReservationBuilder")
+@Builder(builderMethodName = "HistoryBuilder")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class Reservation {
+public class History {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -23,4 +23,5 @@ public class Reservation {
     private Parent parent;
     @ManyToOne
     private Lesson lesson;
+    private String activity;
 }
