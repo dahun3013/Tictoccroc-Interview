@@ -1,6 +1,9 @@
 package com.example.project1.controller;
 
 import com.example.project1.DTO.ReservationDTO;
+import com.example.project1.common.enums.SuccessCode;
+import com.example.project1.common.response.BasicResponse;
+import com.example.project1.common.response.CommonResponse;
 import com.example.project1.service.ReservationServiceImp;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +19,15 @@ public class ReservationController {
 
     @PostMapping("/parent/lessonReservation")
     @Operation(summary = "예약", description = "째깍섬 예약 API")
-    public ResponseEntity lessonReservation(
+    public ResponseEntity<? extends BasicResponse> lessonReservation(
             @RequestBody ReservationDTO reservationDTO
     ){
         reservationServiceImp.makeReservation(reservationDTO);
-        return new ResponseEntity<>(reservationDTO, HttpStatus.OK);
+        CommonResponse cr = new CommonResponse();
+        cr.setMessage("SUCCUES");
+        cr.setData(reservationDTO);
+        cr.setCode(SuccessCode.SUCCESS.getCode());
+        return new ResponseEntity<>(cr,HttpStatus.OK);
     }
 
     @PostMapping("/parent/lessonCancel")

@@ -42,6 +42,7 @@ public class ReservationControllerTest {
                 get("/tictoccroc-island/parents/subscriber/"+parentId))
                 .andExpect(status().isOk())
                 .andExpect(header().string("content-type","application/json"))
+                .andExpect(jsonPath("$.reservationId").exists())
                 .andDo(print());
 
     }
