@@ -16,7 +16,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.OAS_30)
                 .useDefaultResponseMessages(false)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.velog.eunjy.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.example.project1"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());
@@ -24,9 +24,9 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Swagger Test")
-                .description("SwaggerConfig")
-                .version("3.0")
+                .title("Tictoccroc-island API")
+                .description("째깍섬 예약")
+                .version("1.0")
                 .build();
     }
 }

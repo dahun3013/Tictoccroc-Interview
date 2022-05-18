@@ -32,55 +32,75 @@ public class ReservationController {
 
     @PostMapping("/parent/lessonCancel")
     @Operation(summary = "예약취소", description = "째깍섬 예약취소 API")
-    public ResponseEntity lessonCancel(
+    public ResponseEntity<? extends BasicResponse> lessonCancel(
             @RequestBody ReservationDTO reservationDTO
     ){
         reservationServiceImp.cancelReservation(reservationDTO);
-        return new ResponseEntity<>(reservationDTO, HttpStatus.OK);
+        CommonResponse cr = new CommonResponse();
+        cr.setMessage("SUCCUES");
+        cr.setData(reservationDTO);
+        cr.setCode(SuccessCode.SUCCESS.getCode());
+        return new ResponseEntity<>(cr, HttpStatus.OK);
     }
-
-
-    //매장 의 예약 조회 [부모님]
-    //매장 의 예약내역 반환 {전체수업의 예약내역을 List로 담아서 줘야지}
-    //매장 의 해당수업 예약내역 반환
 
     @GetMapping("/parents/subscriber/{parentId}")
     @Operation(summary = "예약조회[부모]", description = "째깍섬 부모의 예약조회 API")
-    public ResponseEntity parentsSubscriber(
+    public ResponseEntity<? extends BasicResponse> parentsSubscriber(
             @PathVariable("parentId") Long parentId
     ){
-        return new ResponseEntity<>(reservationServiceImp.getParentsSubscriber(parentId),HttpStatus.OK);
+        CommonResponse cr = new CommonResponse();
+        cr.setMessage("SUCCUES");
+        cr.setData(reservationServiceImp.getParentsSubscriber(parentId));
+        cr.setCode(SuccessCode.SUCCESS.getCode());
+        return new ResponseEntity<>(cr,HttpStatus.OK);
     }
 
     @GetMapping("/island/subscriber/{islandId}")
     @Operation(summary = "예약조회[매장]", description = "째깍섬 매장별 예약조회 API")
-    public ResponseEntity islandSubscriber(
+    public ResponseEntity<? extends BasicResponse> islandSubscriber(
             @PathVariable("islandId") Long islandId
     ){
-        return new ResponseEntity<>(reservationServiceImp.getIslandSubscriber(islandId),HttpStatus.OK);
+
+        CommonResponse cr = new CommonResponse();
+        cr.setMessage("SUCCUES");
+        cr.setData(reservationServiceImp.getIslandSubscriber(islandId));
+        cr.setCode(SuccessCode.SUCCESS.getCode());
+        return new ResponseEntity<>(cr,HttpStatus.OK);
     }
 
     @GetMapping("/lesson/subscriber/{lessonId}")
     @Operation(summary = "예약조회[수업]", description = "째깍섬 수업별 예약조회 API")
-    public ResponseEntity leassonSubsriber(
+    public ResponseEntity<? extends BasicResponse> lessonSubscriber(
             @PathVariable("lessonId") Long lessonId
     ){
-        return new ResponseEntity<>(reservationServiceImp.getLessonSubscriber(lessonId),HttpStatus.OK);
+        CommonResponse cr = new CommonResponse();
+        cr.setMessage("SUCCUES");
+        cr.setData(reservationServiceImp.getLessonSubscriber(lessonId));
+        cr.setCode(SuccessCode.SUCCESS.getCode());
+        return new ResponseEntity<>(cr,HttpStatus.OK);
     }
 
     @GetMapping("/island/history/{islandId}")
     @Operation(summary = "예약이력조회[매장]", description = "째깍섬 매장별 예약이력조회 API")
-    public ResponseEntity islandHistory(
+    public ResponseEntity<? extends BasicResponse> islandHistory(
             @PathVariable("islandId") Long islandId
     ){
-        return new ResponseEntity<>(null,HttpStatus.OK);
+        CommonResponse cr = new CommonResponse();
+        cr.setMessage("SUCCUES");
+        cr.setData(reservationServiceImp.getIslandHistory(islandId));
+        cr.setCode(SuccessCode.SUCCESS.getCode());
+        return new ResponseEntity<>(cr,HttpStatus.OK);
     }
 
     @GetMapping("/lesson/history/{lessonId}")
     @Operation(summary = "예약이력조회[수업]", description = "째깍섬 수업별 예약이력조회 API")
-    public ResponseEntity leassonHistory(
+    public ResponseEntity<? extends BasicResponse> leassonHistory(
             @PathVariable("lessonId") Long lessonId
     ){
-        return new ResponseEntity<>(null,HttpStatus.OK);
+        CommonResponse cr = new CommonResponse();
+        cr.setMessage("SUCCUES");
+        cr.setData(reservationServiceImp.getLessonHistory(lessonId));
+        cr.setCode(SuccessCode.SUCCESS.getCode());
+        return new ResponseEntity<>(cr,HttpStatus.OK);
     }
 }

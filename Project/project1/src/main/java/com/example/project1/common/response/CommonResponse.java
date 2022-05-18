@@ -12,6 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 public class CommonResponse extends BasicResponse {
     private int code;
-    private Object data;
     private String message;
+    private Object data;
 }
