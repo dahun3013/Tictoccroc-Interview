@@ -1,13 +1,17 @@
 package com.example.project1.service;
 
+import com.example.project1.DTO.LessonDTO;
+import com.example.project1.DTO.ParentDTO;
 import com.example.project1.DTO.ReservationDTO;
-import com.example.project1.domain.History;
-import com.example.project1.domain.Parent;
-import com.example.project1.domain.Reservation;
-import com.example.project1.domain.Lesson;
+import com.example.project1.domain.HistoryEntity;
+import com.example.project1.domain.LessonEntity;
+import com.example.project1.domain.ParentEntity;
 import com.example.project1.domain.repo.*;
+import com.example.project1.util.TimeHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -24,44 +28,55 @@ public class ReservationServiceImp implements ReservationService{
     private final LessonRepo lessonRepo;
     private final HistoryRepo historyRepo;
 
+    private final Logger LOGGER = LoggerFactory.getLogger(ReservationServiceImp.class);
+
     @Override
-    public void makeReservation(ReservationDTO reservation) {
-        Date rDate = reservation.getReserved();
-        Date nowDay = new Date();
-        Date maxDay = new Date();
+    public ReservationDTO createReservation(Long id, Date date, ParentDTO pdto, LessonDTO ldto, int number){
+        return new ReservationDTO(id,date,pdto,ldto,number);
+    }
 
-        Calendar c = Calendar.getInstance();
-        c.setTime(nowDay);
-        c.add(Calendar.DATE, 1);
-        nowDay = c.getTime();
-        c.setTime(maxDay);
-        c.add(Calendar.DATE, 14);
-        maxDay = c.getTime();
+    @Override
+    public void makeReservation(ReservationDTO reservationDTO) {
+        ParentDTO pdto = reservationDTO.getParent();
+        LessonDTO ldto = reservationDTO.getLesson();
+        
+        if(parentRepo.existsById(pdto.getParentId()) && 
+                lessonRepo.existsById(ldto.getLessonId()) &&
+                !reservationRepo.existsByParentIdAndLessonId(pdto.getParentId(),ldto.getLessonId()) &&
+                reservationDTO.getNumber() != 0
+        ) {
+            
+            LOGGER.info("예약하기 서비스 호출");
+            LOGGER.info("예약정보");
+            LOGGER.info("{}", reservationDTO);
 
-        if(nowDay.after(rDate) && maxDay.before(rDate)) {
-            Optional<Parent> p = parentRepo.findById(reservation.getParent().getId());
-            Optional<Lesson> l = lessonRepo.findById(reservation.getLesson().getId());
-            int number = reservation.getNumber() + l.get().getCurrentNum();
+            Date rDate = reservationDTO.getDate();
+            Date nowDay = TimeHelper.getInstance().changeDayOnly(new Date(), 1);
+            Date maxDay = TimeHelper.getInstance().changeDayOnly(new Date(), 14);
 
-            if(number<=l.get().getMaxNum()){
-                l.get().setCurrentNum(number);
-                lessonRepo.save(l.get());
+            LOGGER.debug("날짜조건 확인");
+            LOGGER.info("{} {}", nowDay, maxDay);
+            if (rDate.after(nowDay) && rDate.before(maxDay)) {
+                int number = reservationDTO.getNumber() + ldto.getCurrentNum();
+                LOGGER.debug("예약정원 확인");
+                if (number <= ldto.getMaxNum()) {
+                    ldto.setCurrentNum(number);
+                    LOGGER.info("{} 정원 업데이트", ldto.getLessonName());
+                    lessonRepo.save(ldto.toEntity());
 
-                reservationRepo.save(
-                        Reservation.ReservationBuilder()
-                                .date(rDate)
-                                .parent(p.get())
-                                .lesson(l.get())
-                                .build()
-                );
-                historyRepo.save(
-                        History.HistoryBuilder()
-                                .date(nowDay)
-                                .parent(p.get())
-                                .lesson(l.get())
-                                .activity("C")
-                                .build()
-                );
+                    LOGGER.info("예약정보 저장");
+                    reservationRepo.save(reservationDTO.toEntity());
+
+                    LOGGER.info("예약기록 저장");
+                    historyRepo.save(
+                            HistoryEntity.builder()
+                                    .date(nowDay)
+                                    .parent(pdto.toEntity())
+                                    .lesson(ldto.toEntity())
+                                    .activity("C")
+                                    .build()
+                    );
+                }
             }
         }
     }
@@ -69,38 +84,54 @@ public class ReservationServiceImp implements ReservationService{
     @Override
     public void cancelReservation(ReservationDTO reservation) {
         Date nowDay = new Date();
-        Optional<Parent> p = parentRepo.findById(reservation.getParent().getId());
-        Optional<Lesson> l = lessonRepo.findById(reservation.getLesson().getId());
+        ParentDTO pdto = reservation.getParent();
+        LessonDTO ldto = reservation.getLesson();
+
         reservationRepo.delete(
-                reservationRepo.findByParentIdAndLessonId(p.get().getId(),l.get().getId())
+                reservationRepo.findByParentIdAndLessonId(pdto.getParentId(),ldto.getLessonId())
         );
         historyRepo.save(
-                History.HistoryBuilder()
+                HistoryEntity.builder()
                         .date(nowDay)
-                        .parent(p.get())
-                        .lesson(l.get())
+                        .parent(pdto.toEntity())
+                        .lesson(ldto.toEntity())
                         .activity("D")
                         .build()
         );
     }
 
     @Override
-    public List<Reservation> getParentsSubscriber(Long parentId){
-        return reservationRepo.findAllByParentId(parentRepo.findById(parentId).get().getId());
-    }
-
-    @Override
-    public List<Reservation> getIslandSubscriber(Long islandId) {
-        List<Reservation> result = new ArrayList<>();
-        lessonRepo.findAllByIslandId(
-                islandRepo.findById(islandId).get().getId()
-        ).forEach(l -> {result.addAll(reservationRepo.findAllByLessonId(l.getId()));});
+    public List<ReservationDTO> getParentsSubscriber(Long parentId){
+        List<ReservationDTO> result = new ArrayList<>();
+        reservationRepo.findAllByParentId(
+                parentRepo.findById(parentId).get().getId()
+        ).forEach(e -> result.add(e.toDTO()));
 
         return result;
     }
 
     @Override
-    public List<Reservation> getLessonSubscriber(Long lessonId) {
-        return reservationRepo.findAllByLessonId(lessonRepo.findById(lessonId).get().getId());
+    public List<ReservationDTO> getIslandSubscriber(Long islandId) {
+        List<ReservationDTO> result = new ArrayList<>();
+        lessonRepo.findAllByIslandId(
+                islandRepo.findById(islandId).get().getId()
+        ).forEach(l -> {
+            reservationRepo.findAllByLessonId(l.getId())
+                    .forEach(e -> {
+                        result.add(e.toDTO());
+                    });
+        });
+
+        return result;
+    }
+
+    @Override
+    public List<ReservationDTO> getLessonSubscriber(Long lessonId) {
+        List<ReservationDTO> result = new ArrayList<>();
+        reservationRepo.findAllByLessonId(
+                lessonRepo.findById(lessonId).get().getId()
+        ).forEach(e -> result.add(e.toDTO()));
+
+        return result;
     }
 }

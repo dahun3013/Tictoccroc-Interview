@@ -8,8 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-
 @RestController
 @RequestMapping("/tictoccroc-island")
 public class ReservationController {
@@ -19,19 +17,19 @@ public class ReservationController {
     @PostMapping("/parent/lessonReservation")
     @Operation(summary = "예약", description = "째깍섬 예약 API")
     public ResponseEntity lessonReservation(
-            @RequestBody ReservationDTO reservation
+            @RequestBody ReservationDTO reservationDTO
     ){
-        reservationServiceImp.makeReservation(reservation);
-        return new ResponseEntity<>(reservation, HttpStatus.OK);
+        reservationServiceImp.makeReservation(reservationDTO);
+        return new ResponseEntity<>(reservationDTO, HttpStatus.OK);
     }
 
     @PostMapping("/parent/lessonCancel")
     @Operation(summary = "예약취소", description = "째깍섬 예약취소 API")
     public ResponseEntity lessonCancel(
-            @RequestBody ReservationDTO reservation
+            @RequestBody ReservationDTO reservationDTO
     ){
-        reservationServiceImp.cancelReservation(reservation);
-        return new ResponseEntity<>(reservation, HttpStatus.OK);
+        reservationServiceImp.cancelReservation(reservationDTO);
+        return new ResponseEntity<>(reservationDTO, HttpStatus.OK);
     }
 
 

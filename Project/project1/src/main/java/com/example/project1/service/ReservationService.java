@@ -1,15 +1,18 @@
 package com.example.project1.service;
 
-import com.example.project1.DTO.ReservationDTO;
-import com.example.project1.domain.Reservation;
 
-import java.time.LocalDateTime;
+import com.example.project1.DTO.LessonDTO;
+import com.example.project1.DTO.ParentDTO;
+import com.example.project1.DTO.ReservationDTO;
+
+import java.util.Date;
 import java.util.List;
 
 public interface ReservationService {
-    void makeReservation(ReservationDTO reservation);
-    void cancelReservation(ReservationDTO reservation);
-    List<Reservation> getParentsSubscriber(Long parentId);
-    List<Reservation> getIslandSubscriber(Long islandId);
-    List<Reservation> getLessonSubscriber(Long lessonId);
+    ReservationDTO createReservation(Long id, Date date, ParentDTO pdto, LessonDTO ldto, int number);
+    void makeReservation(ReservationDTO reservationDTO);
+    void cancelReservation(ReservationDTO reservationDTO);
+    List<ReservationDTO> getParentsSubscriber(Long parentId);
+    List<ReservationDTO> getIslandSubscriber(Long islandId);
+    List<ReservationDTO> getLessonSubscriber(Long lessonId);
 }

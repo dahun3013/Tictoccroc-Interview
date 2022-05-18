@@ -1,14 +1,14 @@
 package com.example.project1.domain.repo;
-import com.example.project1.domain.Lesson;
-import com.example.project1.domain.Parent;
-import com.example.project1.domain.Reservation;
+import com.example.project1.domain.ReservationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ReservationRepo extends JpaRepository<Reservation,Long>{
-    List<Reservation> findAllByParentId(Long parentId);
-    List<Reservation> findAllByLessonId(Long lessonId);
-    Reservation findByParentIdAndLessonId(Long parentId, Long lessonId);
+public interface ReservationRepo extends JpaRepository<ReservationEntity,Long>{
+    List<ReservationEntity> findAllByParentId(Long parentId);
+    List<ReservationEntity> findAllByLessonId(Long lessonId);
+    ReservationEntity findByParentIdAndLessonId(Long parentId, Long lessonId);
+
+    boolean existsByParentIdAndLessonId(Long parentId, Long lessonId);
 
 }

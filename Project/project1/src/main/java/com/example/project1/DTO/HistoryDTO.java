@@ -1,6 +1,6 @@
 package com.example.project1.DTO;
 
-import com.example.project1.domain.ReservationEntity;
+import com.example.project1.domain.HistoryEntity;
 import lombok.*;
 
 import java.util.Date;
@@ -10,21 +10,20 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@ToString
-public class ReservationDTO {
-    private Long reservationId;
+public class HistoryDTO {
+    private Long historyId;
     private Date date;
     private ParentDTO parent;
     private LessonDTO lesson;
-    private int number;
+    private String activity;
 
-    public ReservationEntity toEntity(){
-        return ReservationEntity.builder()
-                .id(reservationId)
+    public HistoryEntity toEntity(){
+        return HistoryEntity.builder()
+                .id(historyId)
                 .date(date)
                 .parent(parent.toEntity())
                 .lesson(lesson.toEntity())
-                .number(number)
+                .activity(activity)
                 .build();
     }
 }
