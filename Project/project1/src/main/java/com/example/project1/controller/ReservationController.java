@@ -15,11 +15,6 @@ import java.io.IOException;
 public class ReservationController {
     @Autowired
     private ReservationServiceImp reservationServiceImp;
-    //예약
-    //예약취소
-    //매장 의 예약 조회 [부모님]
-    //매장 의 예약내역 반환 {전체수업의 예약내역을 List로 담아서 줘야지}
-    //매장 의 해당수업 예약내역 반환
 
     @PostMapping("/parent/lessonReservation")
     @Operation(summary = "예약", description = "째깍섬 예약 API")
@@ -38,6 +33,11 @@ public class ReservationController {
         reservationServiceImp.cancelReservation(reservation);
         return new ResponseEntity<>(reservation, HttpStatus.OK);
     }
+
+
+    //매장 의 예약 조회 [부모님]
+    //매장 의 예약내역 반환 {전체수업의 예약내역을 List로 담아서 줘야지}
+    //매장 의 해당수업 예약내역 반환
 
     @GetMapping("/parents/subscriber/{parentId}")
     @Operation(summary = "예약조회[부모]", description = "째깍섬 부모의 예약조회 API")
