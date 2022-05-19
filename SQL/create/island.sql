@@ -5,4 +5,4 @@ CREATE TABLE `island` (
   PRIMARY KEY (`island_id`),
   KEY `FKop5gaolgiacf8xnsivk1ologo` (`address_id`),
   CONSTRAINT `FKop5gaolgiacf8xnsivk1ologo` FOREIGN KEY (`address_id`) REFERENCES `address` (`address_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

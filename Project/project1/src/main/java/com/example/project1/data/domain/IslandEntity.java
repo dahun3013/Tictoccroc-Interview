@@ -15,7 +15,7 @@ public class IslandEntity {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long islandId;
     private String islandName;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
     private AddressEntity address;
 }
