@@ -14,11 +14,17 @@ public class TimeHelper {
     private Calendar c = Calendar.getInstance();
     public Date changeDayOnly(Date date, int num){
         c.setTime(date);
-        c.add(Calendar.DATE,num);
+        c.add( Calendar.DATE, num);
         c.set( Calendar.HOUR_OF_DAY, 0 );
         c.set( Calendar.MINUTE, 0 );
         c.set( Calendar.SECOND, 0 );
         c.set( Calendar.MILLISECOND, 0 );
+        return c.getTime();
+    }
+
+    public Date setTimeZone(Date date){
+        c.setTime(date);
+        c.add( Calendar.HOUR_OF_DAY, 9);
         return c.getTime();
     }
 }

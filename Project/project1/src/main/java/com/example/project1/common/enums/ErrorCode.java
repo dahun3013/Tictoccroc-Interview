@@ -14,6 +14,8 @@ import static org.springframework.http.HttpStatus.CONFLICT;
 public enum ErrorCode {
     /* 400 BAD_REQUEST : 잘못된 요청 */
     INVALID_DATA(BAD_REQUEST, "유효하지 않은 데이터 입니다."),
+    OVERFLOW_DATA(BAD_REQUEST, "정원초과 입니다."),
+    WRONG_DATE_DATA(BAD_REQUEST, "올바르지 않은 예약일 입니다."),
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     NO_DATA(NOT_FOUND, "데이터가 없습니다."),

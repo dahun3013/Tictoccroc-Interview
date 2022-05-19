@@ -1,12 +1,18 @@
 package com.example.project1.service;
 
-import com.example.project1.DTO.HistoryDTO;
-import com.example.project1.DTO.LessonDTO;
-import com.example.project1.DTO.ParentDTO;
-import com.example.project1.DTO.ReservationDTO;
+import com.example.project1.data.domain.LessonEntity;
+import com.example.project1.data.domain.ParentEntity;
+import com.example.project1.data.dto.HistoryDTO;
+import com.example.project1.data.dto.LessonDTO;
+import com.example.project1.data.dto.ParentDTO;
+import com.example.project1.data.dto.ReservationDTO;
 import com.example.project1.common.error.CustomException;
-import com.example.project1.domain.HistoryEntity;
-import com.example.project1.domain.repo.*;
+import com.example.project1.data.domain.HistoryEntity;
+import com.example.project1.data.domain.repo.*;
+import com.example.project1.data.mapper.HistoryMapper;
+import com.example.project1.data.mapper.LessonMapper;
+import com.example.project1.data.mapper.ParentMapper;
+import com.example.project1.data.mapper.ReservationMapper;
 import com.example.project1.util.TimeHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +48,7 @@ public class ReservationServiceImp implements ReservationService{
         ){
             throw new CustomException(INVALID_DATA);
         }
-        if(reservationRepo.existsByParentIdAndLessonId(pdto.getParentId(),ldto.getLessonId())){
+        if(reservationRepo.existsByParentAndLesson(ParentMapper.INSTANCE.toEntity(pdto),LessonMapper.INSTANCE.toEntity(ldto))){
             throw new CustomException(DUPLICATE_RESOURCE);
         }
 
@@ -56,42 +62,46 @@ public class ReservationServiceImp implements ReservationService{
         Date maxDay = TimeHelper.getInstance().changeDayOnly(new Date(), 14);
 
         LOGGER.debug("날짜조건 확인");
-        if (rDate.after(nowDay) && rDate.before(maxDay)) {
-            int number = reservationDTO.getNumber() + ldto.getCurrentNum();
-            LOGGER.debug("예약정원 확인");
-            if (number <= ldto.getMaxNum()) {
-                LOGGER.info("{} 수업 정원변경",ldto.getLessonName());
-                ldto.setCurrentNum(number);
-                lessonRepo.save(ldto.toEntity());
-
-                LOGGER.info("예약정보 저장");
-                reservationRepo.save(reservationDTO.toEntity());
-
-                LOGGER.info("예약기록 저장");
-                historyRepo.save(
-                        HistoryEntity.builder()
-                                .date(new Date())
-                                .parent(pdto.toEntity())
-                                .lesson(ldto.toEntity())
-                                .activity("예약완료")
-                                .build()
-                );
-            }
+        if (!(rDate.after(nowDay) && rDate.before(maxDay))) {
+            throw new CustomException(WRONG_DATE_DATA);
         }
 
+        int number = reservationDTO.getNumber() + ldto.getCurrentNum();
+        LOGGER.debug("예약정원 확인");
+        if (number > ldto.getMaxNum()) {
+            throw new CustomException(OVERFLOW_DATA);
+        }
+
+        LOGGER.info("{} 수업 정원변경",ldto.getLessonName());
+        ldto.setCurrentNum(number);
+        lessonRepo.save(LessonMapper.INSTANCE.toEntity(ldto));
+
+        LOGGER.info("예약정보 저장");
+        reservationRepo.save(ReservationMapper.INSTANCE.toEntity(reservationDTO));
+
+        LOGGER.info("예약기록 저장");
+        historyRepo.save(
+                HistoryEntity.builder()
+                        .date(TimeHelper.getInstance().setTimeZone(new Date()))
+                        .parent(ParentMapper.INSTANCE.toEntity(pdto))
+                        .lesson(LessonMapper.INSTANCE.toEntity(ldto))
+                        .activity("예약완료")
+                        .build()
+        );
     }
 
     @Override
     public void cancelReservation(ReservationDTO reservationDTO) {
         ParentDTO pdto = reservationDTO.getParent();
         LessonDTO ldto = reservationDTO.getLesson();
+
         if(!parentRepo.existsById(pdto.getParentId()) ||
                 !lessonRepo.existsById(ldto.getLessonId()) ||
                 reservationDTO.getNumber() == 0
         ){
             throw new CustomException(INVALID_DATA);
         }
-        if(!reservationRepo.existsByParentIdAndLessonId(pdto.getParentId(),ldto.getLessonId())){
+        if(!reservationRepo.existsByParentAndLesson(ParentMapper.INSTANCE.toEntity(pdto),LessonMapper.INSTANCE.toEntity(ldto))){
             throw new CustomException(NO_DATA);
         }
 
@@ -101,18 +111,18 @@ public class ReservationServiceImp implements ReservationService{
 
         LOGGER.info("{} 수업 정원변경",ldto.getLessonName());
         ldto.setCurrentNum(ldto.getCurrentNum()-reservationDTO.getNumber());
-        lessonRepo.save(ldto.toEntity());
+        lessonRepo.save(LessonMapper.INSTANCE.toEntity(ldto));
 
         LOGGER.info("예약취소");
         reservationRepo.delete(
-                reservationRepo.findByParentIdAndLessonId(pdto.getParentId(),ldto.getLessonId())
+                reservationRepo.findByParentAndLesson(ParentMapper.INSTANCE.toEntity(pdto),LessonMapper.INSTANCE.toEntity(ldto))
         );
         LOGGER.info("예약기록 저장");
         historyRepo.save(
                 HistoryEntity.builder()
-                        .date(new Date())
-                        .parent(pdto.toEntity())
-                        .lesson(ldto.toEntity())
+                        .date(TimeHelper.getInstance().setTimeZone(new Date()))
+                        .parent(ParentMapper.INSTANCE.toEntity(pdto))
+                        .lesson(LessonMapper.INSTANCE.toEntity(ldto))
                         .activity("예약취소")
                         .build()
         );
@@ -122,12 +132,12 @@ public class ReservationServiceImp implements ReservationService{
     public List<ReservationDTO> getIslandSubscriber(Long islandId) {
         List<ReservationDTO> result = new ArrayList<>();
         LOGGER.info("지점별 예약현황");
-        lessonRepo.findAllByIslandId(
-                islandRepo.findById(islandId).get().getId()
+        lessonRepo.findAllByIsland(
+                islandRepo.findById(islandId).get()
         ).forEach(l -> {
-            reservationRepo.findAllByLessonId(l.getId())
+            reservationRepo.findAllByLesson(l)
                     .forEach(e -> {
-                        result.add(e.toDTO());
+                        result.add(ReservationMapper.INSTANCE.toDTO(e));
                     });
         });
 
@@ -138,9 +148,9 @@ public class ReservationServiceImp implements ReservationService{
     public List<ReservationDTO> getLessonSubscriber(Long lessonId) {
         List<ReservationDTO> result = new ArrayList<>();
         LOGGER.info("수업별 예약현황");
-        reservationRepo.findAllByLessonId(
-                lessonRepo.findById(lessonId).get().getId()
-        ).forEach(e -> result.add(e.toDTO()));
+        reservationRepo.findAllByLesson(
+                lessonRepo.findById(lessonId).get()
+        ).forEach(e -> result.add(ReservationMapper.INSTANCE.toDTO(e)));
 
         return result;
     }
@@ -149,9 +159,9 @@ public class ReservationServiceImp implements ReservationService{
     public List<HistoryDTO> getIslandHistory(Long islandId) {
         List<HistoryDTO> result = new ArrayList<>();
         LOGGER.info("지점별 예약이력");
-        lessonRepo.findAllByIslandId(islandId).forEach(l ->{
-            historyRepo.findAllByLessonId(l.getId()).forEach(e ->{
-                result.add(e.toDTO());
+        lessonRepo.findAllByIsland(islandRepo.findById(islandId).get()).forEach(l ->{
+            historyRepo.findAllByLesson(l).forEach(e ->{
+                result.add(HistoryMapper.INSTANCE.toDTO(e));
             });
         });
         return result;
@@ -161,8 +171,8 @@ public class ReservationServiceImp implements ReservationService{
     public List<HistoryDTO> getLessonHistory(Long lessonId) {
         List<HistoryDTO> result = new ArrayList<>();
         LOGGER.info("수업별 예약이력");
-        historyRepo.findAllByLessonId(lessonId).forEach(e ->{
-            result.add(e.toDTO());
+        historyRepo.findAllByLesson(lessonRepo.findById(lessonId).get()).forEach(e ->{
+            result.add(HistoryMapper.INSTANCE.toDTO(e));
         });
         return result;
     }

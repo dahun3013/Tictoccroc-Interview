@@ -1,6 +1,6 @@
 package com.example.project1.controller;
 
-import com.example.project1.DTO.ReservationDTO;
+import com.example.project1.data.dto.ReservationDTO;
 import com.example.project1.common.enums.SuccessCode;
 import com.example.project1.common.response.BasicResponse;
 import com.example.project1.common.response.CommonResponse;
@@ -24,8 +24,8 @@ public class ReservationController {
     ){
         reservationServiceImp.makeReservation(reservationDTO);
         CommonResponse cr = new CommonResponse(
-                SuccessCode.SUCCESS.getCode()
-                , "SUCCESS");
+                SuccessCode.CREATE.getCode()
+                , "CREATE_SUCCESS");
         return new ResponseEntity<>(cr,HttpStatus.OK);
     }
 
@@ -37,7 +37,7 @@ public class ReservationController {
         reservationServiceImp.cancelReservation(reservationDTO);
         CommonResponse cr = new CommonResponse(
                 SuccessCode.SUCCESS.getCode()
-                , "SUCCESS");
+                , "DELETE_SUCCESS");
         return new ResponseEntity<>(cr, HttpStatus.OK);
     }
 

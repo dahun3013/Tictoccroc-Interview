@@ -1,23 +1,20 @@
 package com.example.project1.service;
 
-import com.example.project1.DTO.LessonDTO;
-import com.example.project1.DTO.ParentDTO;
-import com.example.project1.DTO.ReservationDTO;
-import com.example.project1.domain.ReservationEntity;
-import com.example.project1.domain.repo.LessonRepo;
-import com.example.project1.domain.repo.ParentRepo;
+import com.example.project1.data.dto.LessonDTO;
+import com.example.project1.data.dto.ParentDTO;
+import com.example.project1.data.domain.repo.LessonRepo;
+import com.example.project1.data.domain.repo.ParentRepo;
+import com.example.project1.data.mapper.LessonMapper;
+import com.example.project1.data.mapper.ParentMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Calendar;
 import java.util.Date;
-
-import static org.mockito.BDDMockito.given;
 
 //@SpringBootTest(classes = ReservationServiceImp.class)
 @ExtendWith(SpringExtension.class)
@@ -38,8 +35,8 @@ public class ReservationServiceTest {
         c.setTime(day);
         c.add(Calendar.DATE, 1);
         day = c.getTime();
-        ParentDTO pdto = parentRepo.findById(1L).get().toDTO();
-        LessonDTO ldto = lessonRepo.findById(1L).get().toDTO();
+        ParentDTO pdto = ParentMapper.INSTANCE.toDTO(parentRepo.findById(1L).get());
+        LessonDTO ldto = LessonMapper.INSTANCE.toDTO(lessonRepo.findById(1L).get());
         Long id = 1L;
     }
 }

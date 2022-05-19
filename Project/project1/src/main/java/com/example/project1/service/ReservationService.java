@@ -1,12 +1,9 @@
 package com.example.project1.service;
 
 
-import com.example.project1.DTO.HistoryDTO;
-import com.example.project1.DTO.LessonDTO;
-import com.example.project1.DTO.ParentDTO;
-import com.example.project1.DTO.ReservationDTO;
+import com.example.project1.data.dto.HistoryDTO;
+import com.example.project1.data.dto.ReservationDTO;
 
-import java.util.Date;
 import java.util.List;
 
 public interface ReservationService {

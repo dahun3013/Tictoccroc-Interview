@@ -1,6 +1,6 @@
-package com.example.project1.domain;
+package com.example.project1.data.domain;
 
-import com.example.project1.DTO.ReservationDTO;
+import com.example.project1.data.dto.ReservationDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,21 +16,14 @@ import java.util.Date;
 public class ReservationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long reservationId;
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="parent_id")
     private ParentEntity parent;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lesson_id")
     private LessonEntity lesson;
     private int number;
-
-    public ReservationDTO toDTO(){
-        return ReservationDTO.builder()
-                .reservationId(id)
-                .date(date)
-                .parent(parent.toDTO())
-                .lesson(lesson.toDTO())
-                .build();
-    }
 }

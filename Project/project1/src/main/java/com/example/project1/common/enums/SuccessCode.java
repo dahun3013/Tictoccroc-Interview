@@ -7,7 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum SuccessCode {
     /* OK : 성공 */
-    SUCCESS(200);
+    SUCCESS(200),
+    CREATE(201);
 
     private final int code;
 }
