@@ -25,6 +25,9 @@
 ## ERD
 ![ERD](https://user-images.githubusercontent.com/82797327/169296031-bdde0866-b7a9-47cc-a6fd-51eafac143ce.PNG)
 
+ ![Model](https://user-images.githubusercontent.com/82797327/169302099-340b79e9-8ef6-4227-8300-6a9c1decbebf.PNG)
+
+ 
  </ul>
  
 # FlowChart
