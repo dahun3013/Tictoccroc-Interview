@@ -21,3 +21,43 @@
 3.예약이력<br>
 
 ![ERD](https://user-images.githubusercontent.com/82797327/169296031-bdde0866-b7a9-47cc-a6fd-51eafac143ce.PNG)
+
+# FlowChart
+
+![lessonReservation](https://user-images.githubusercontent.com/82797327/169298717-9b2ce934-9b74-43bc-bf02-b375560123ca.PNG)
+
+
+![lessonCancel](https://user-images.githubusercontent.com/82797327/169298733-f4ccd183-e24e-4095-a3ae-29194e470ae1.PNG)
+
+
+![getSubscriber](https://user-images.githubusercontent.com/82797327/169298739-1ba541ed-7730-44fe-9c88-dbb325c5ed35.PNG)
+
+
+![getHistory](https://user-images.githubusercontent.com/82797327/169298750-28753841-c13e-47dc-b529-f7c8f0a8c4a3.PNG)
+
+# Swagger API Documents
+
+![swagger](https://user-images.githubusercontent.com/82797327/169298829-23e3a2d8-140c-4e8b-a1d2-19a512c955a9.PNG)
+
+
+![RESTAPI_예약이력조회 매장](https://user-images.githubusercontent.com/82797327/169298882-4c71bd94-199e-4299-bb45-a4494e91a0b4.PNG)
+
+
+![RESTAPI_예약조회 매장](https://user-images.githubusercontent.com/82797327/169298942-7e4776cc-553e-46b2-9de1-97730775971f.PNG)
+
+
+![RESTAPI_예약이력조회 수업](https://user-images.githubusercontent.com/82797327/169298961-32975fe9-dd4f-42d5-8840-28f63ea7e4dd.PNG)
+
+
+![RESTAPI_예약조회 수업](https://user-images.githubusercontent.com/82797327/169298974-3202d43b-4bfa-4d6c-a5aa-0179f01a7659.PNG)
+
+
+![RESTAPI_예약취소](https://user-images.githubusercontent.com/82797327/169299018-1e338771-49a0-4630-b6e5-19df247e2203.PNG)
+
+
+![RESTAPI_예약](https://user-images.githubusercontent.com/82797327/169299040-e3e20e69-3274-4a2b-b5b3-6473ffa3a354.PNG)
+
+
+![RESTAPI_Schemas](https://user-images.githubusercontent.com/82797327/169299067-037a47e4-b2e1-426b-874d-a607b73edda7.PNG)
+
+
