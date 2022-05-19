@@ -24,16 +24,16 @@
 
 # FlowChart
 
-## 예약하기
+##> 예약하기
 ![lessonReservation](https://user-images.githubusercontent.com/82797327/169298717-9b2ce934-9b74-43bc-bf02-b375560123ca.PNG)
 
-## 예약취소
+##> 예약취소
 ![lessonCancel](https://user-images.githubusercontent.com/82797327/169298733-f4ccd183-e24e-4095-a3ae-29194e470ae1.PNG)
 
-## 예약자 현황
+##> 예약자 현황
 ![getSubscriber](https://user-images.githubusercontent.com/82797327/169298739-1ba541ed-7730-44fe-9c88-dbb325c5ed35.PNG)
 
-## 예약 이력
+##> 예약 이력
 ![getHistory](https://user-images.githubusercontent.com/82797327/169298750-28753841-c13e-47dc-b529-f7c8f0a8c4a3.PNG)
 
 # Swagger API Documents
