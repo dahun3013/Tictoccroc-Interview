@@ -22,6 +22,7 @@ public class TimeHelper {
         return c.getTime();
     }
 
+    //한국기준으로 시간변경
     public Date setTimeZone(Date date){
         c.setTime(date);
         c.add( Calendar.HOUR_OF_DAY, 9);

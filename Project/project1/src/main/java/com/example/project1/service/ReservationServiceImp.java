@@ -131,7 +131,7 @@ public class ReservationServiceImp implements ReservationService{
     @Override
     public List<ReservationDTO> getIslandSubscriber(Long islandId) {
         List<ReservationDTO> result = new ArrayList<>();
-        LOGGER.info("지점별 예약현황");
+        LOGGER.info("매장별 예약현황");
         lessonRepo.findAllByIsland(
                 islandRepo.findById(islandId).get()
         ).forEach(l -> {
@@ -158,7 +158,7 @@ public class ReservationServiceImp implements ReservationService{
     @Override
     public List<HistoryDTO> getIslandHistory(Long islandId) {
         List<HistoryDTO> result = new ArrayList<>();
-        LOGGER.info("지점별 예약이력");
+        LOGGER.info("매장별 예약이력");
         lessonRepo.findAllByIsland(islandRepo.findById(islandId).get()).forEach(l ->{
             historyRepo.findAllByLesson(l).forEach(e ->{
                 result.add(HistoryMapper.INSTANCE.toDTO(e));
