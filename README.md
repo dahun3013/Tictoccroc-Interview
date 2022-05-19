@@ -24,7 +24,8 @@
 
 # FlowChart
 
-<ul> 예약하기
+<ul>
+## 예약하기
 ![lessonReservation](https://user-images.githubusercontent.com/82797327/169298717-9b2ce934-9b74-43bc-bf02-b375560123ca.PNG)
 
 ## 예약취소
