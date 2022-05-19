@@ -9,9 +9,13 @@ import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class CommonResponse extends BasicResponse {
-    private int code;
-    private String message;
     private Object data;
+    public CommonResponse(int code, String message){
+        super(code,message);
+    }
+    public CommonResponse(int code, String message, Object data){
+        super(code,message);
+        this.data = data;
+    }
 }

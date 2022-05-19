@@ -12,7 +12,6 @@ import java.util.List;
 public interface ReservationService {
     void makeReservation(ReservationDTO reservationDTO);
     void cancelReservation(ReservationDTO reservationDTO);
-    List<ReservationDTO> getParentsSubscriber(Long parentId);
     List<ReservationDTO> getIslandSubscriber(Long islandId);
     List<ReservationDTO> getLessonSubscriber(Long lessonId);
     List<HistoryDTO> getIslandHistory(Long islandId);

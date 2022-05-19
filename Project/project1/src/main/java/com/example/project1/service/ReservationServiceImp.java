@@ -119,17 +119,6 @@ public class ReservationServiceImp implements ReservationService{
     }
 
     @Override
-    public List<ReservationDTO> getParentsSubscriber(Long parentId){
-        List<ReservationDTO> result = new ArrayList<>();
-        LOGGER.info("부모별 예약현황");
-        reservationRepo.findAllByParentId(
-                parentRepo.findById(parentId).get().getId()
-        ).forEach(e -> result.add(e.toDTO()));
-
-        return result;
-    }
-
-    @Override
     public List<ReservationDTO> getIslandSubscriber(Long islandId) {
         List<ReservationDTO> result = new ArrayList<>();
         LOGGER.info("지점별 예약현황");
