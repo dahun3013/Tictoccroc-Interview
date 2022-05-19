@@ -1,0 +1,11 @@
+insert into parent(email,parent_name) values ('dahun3013@gmail.com', '정다훈');
+insert into parent(email,parent_name) values ('test1@naver.com', '홍길동');
+insert into parent(email,parent_name) values ('test2@naver.com', '김갑수');
+insert into parent(email,parent_name) values ('test3@naver.com', '이은정');
+insert into parent(email,parent_name) values ('test4@naver.com', '이은미');
+insert into parent(email,parent_name) values ('test5@naver.com', '김여정');
+insert into parent(email,parent_name) values ('test6@naver.com', '홍길동');
+insert into parent(email,parent_name) values ('test7@naver.com', '김갑수');
+insert into parent(email,parent_name) values ('test8@naver.com', '이은정');
+insert into parent(email,parent_name) values ('test9@naver.com', '이은미');
+insert into parent(email,parent_name) values ('test10@naver.com', '김여정');

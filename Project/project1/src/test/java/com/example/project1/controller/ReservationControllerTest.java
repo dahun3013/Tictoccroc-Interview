@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 
 import java.util.Date;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
@@ -111,7 +112,7 @@ public class ReservationControllerTest {
     }
 
     @Test
-    @DisplayName("Reservation 데이터 가져오기 테스트")
+    @DisplayName("getIslandSubscriber 지점별 예약자 현황 조회 테스트")
     void getIslandSubscriber() throws Exception {
         //given
         ParentDTO parentDTO = ParentDTO.builder()
@@ -146,17 +147,67 @@ public class ReservationControllerTest {
                 .build();
 
         reservationService.makeReservation(reservationDTO);
-
+        List<ReservationDTO> reservationDTOList = reservationService.getIslandSubscriber(1L);
         String islandId = "1";
 
         //when
         final ResultActions actions =
                 mockMvc.perform(
                         get("/tictoccroc-island/island/subscriber/1")
-                                .contentType(MediaType.APPLICATION_JSON)
-                )
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("message").value("SUCCESS"))
                         .andDo(print());
     }
 
 
+    @Test
+    @DisplayName("getIslandHistory 지점별 예약이력 조회 테스트")
+    void getIslandHistory() throws Exception {
+        //given
+        ParentDTO parentDTO = ParentDTO.builder()
+                .parentId(2L)
+                .parentName("홍길동")
+                .email("test1@naver.com")
+                .build();
+        AddressDTO addressDTO = AddressDTO.builder()
+                .addressId(1L)
+                .address1("서울")
+                .address2("송파구")
+                .address3("올림픽로 300 롯데월드몰 엔터테인먼트동 4층 (롯데시네마 바로 아래 4층 수수가든 옆)")
+                .build();
+        IslandDTO islandDTO = IslandDTO.builder()
+                .islandId(1L)
+                .islandName("잠실점")
+                .address(addressDTO)
+                .build();
+        LessonDTO lessonDTO = LessonDTO.builder()
+                .lessonId(2L)
+                .island(islandDTO)
+                .lessonName("도시농부")
+                .currentNum(10)
+                .maxNum(20)
+                .build();
+        ReservationDTO reservationDTO = ReservationDTO.builder()
+                .reservationId(1L)
+                .date(new Date())
+                .parent(parentDTO)
+                .lesson(lessonDTO)
+                .number(10)
+                .build();
+
+        reservationService.makeReservation(reservationDTO);
+        List<HistoryDTO> historyDTOList = reservationService.getIslandHistory(1L);
+
+        String historyId = "1";
+
+        //when
+        final ResultActions actions =
+                mockMvc.perform(
+                                get("/tictoccroc-island/island/history/1")
+                                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("message").value("SUCCESS"))
+                        .andDo(print());
+    }
 }
